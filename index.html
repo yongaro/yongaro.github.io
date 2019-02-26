@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="css/portfolio_style.css">
+
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="third_parties/jquery-3.3.1.min.js"></script>
+  <script src="third_parties/popper-1.14.6.min.js"></script>
+  <script src="third_parties/bootstrap-4.2.1/js/bootstrap.js"></script>
+  <script type="text/javascript" src="js/json_backup.js"></script>
+  <script type="text/javascript" src="js/portfolio_scripts.js"></script>
+
+  <title>Portfolio</title>
+</head>
+
+
+
+<body onload="load_projects()">
+  <div class="sidebar">
+    <div> <h5>Yoann Ongaro</h5><p class="theme-font-alt">Ingénieur rendu junior</p> </div>
+    <a href="#projects">Projets et contributions</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+
+    <div class="content container-fluid" id="projects">
+      <h2>Projets et contributions</h2>
+      <div class="row justify-content-start align-items-center no-gutters project-grid">
+
+
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.Imagerie3D)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background project-thumbnail" src="data/images/e3.png"></img>
+              <div class="overlay"> <span><h4>Imagerie 3D</h4></span> </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.Mandelbrot)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background" src="data/images/m6.png"></img>
+              <div class="overlay"> <span><h3>Mandelbrot</h3></span> </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.Pokemon)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background" src="data/images/pok1.png"></img>
+              <div class="overlay"> <span><h4>Pokemon libGDX</h4></span> </div>
+            </div>
+          </a>
+        </div>
+
+
+
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.Vulkan)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background" src="data/images/vk4.jpg"></img>
+              <div class="overlay"> <span><h3>Vulkan</h3></span> </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.Clarisse)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background" width="1920px" height="1080px" src="data/images/clarisse_ifx_simple.svg"></img>
+              <div class="overlay"> <span><h4>Clarisse iFX</h4></span> </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.AlgoGeo)">
+            <div class="img-container hgb-root project-thumbnail">
+                <img class="project-thumbnail-img hgb-background" src="data/images/cc2.png">
+              <div class="overlay"> <span><h3>Algos de géométries</h3></span> </div>
+            </div>
+          </a>
+        </div>
+
+
+
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.VoxEngine)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background" src="data/images/VoxEngine-deferred.jpg"></img>
+              <div class="overlay"> <span><h3>VoxEngine</h3></span> </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.SeriousFarm)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background project-thumbnail" src="data/images/winter.png">
+              <div class="overlay"> <span><h3>SeriousFarm</h3></span> </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-auto">
+          <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.Borderlands)">
+            <div class="img-container hgb-root project-thumbnail">
+              <img class="project-thumbnail-img hgb-background" src="data/images/bor5.jpg"></img>
+              <div class="overlay"> <span><h3>Borderlands</h3></span> </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="container-fluid" id="contact">
+        <h2>Contact</h2>
+        <p>
+          <!-- Ancien ingénieur rendu junior à Isotropix, je suis à la recherche d'un travail dans un poste similaire. -->
+
+        </p>
+      </div>
+    </div>
+
+
+
+    <div id="project_fullscreen_modal" class="fullscreen-modal">
+      <div class="container-fluid p-3">
+
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-danger" onclick="closeNav()">Fermer</button>
+        </div>
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-auto col-lg-8">
+              <div class="project-image-viewer p-3" id="modal_current_content"></div>
+              <div class="flex-hz-slider">
+                <div class="d-flex justify-content-start align-items-center" id="modal_image_slider"></div>
+              </div>
+            </div>
+            <div class="col-auto col-lg-4">
+              <div class="d-flex justify-content-between">
+                <h4 id="modal_title">Title</h4>
+              </div>
+
+              <div id="modal_project_text"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>

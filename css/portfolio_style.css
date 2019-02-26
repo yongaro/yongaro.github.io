@@ -1,0 +1,113 @@
+@import "../third_parties/bootstrap-4.2.1/css/bootstrap.css";
+@import "common.css";
+
+
+/* Hover Gray Blur framework */
+/* Use by putting an image(hgb-background) and some text (hgb-foreground) in a div (hgb-root) */
+/* Blur the background while fading in the foreground element on hover.*/
+.hgb-root{ position: relative; }
+
+.hgb-background {
+  opacity: 1;
+  transition: .5s ease;
+}
+
+.hgb-foreground {
+  transition: .5s ease;
+  opacity: 0;
+}
+
+.hgb-root:hover .hgb-background {
+   opacity: 0.8;
+   -webkit-filter: brightness(66%) blur(3px);
+   filter: brightness(66%) blur(3px);
+}
+
+.hgb-root:hover .hgb-foreground { opacity: 1.0; }
+
+
+/* Card like image overlay system used for the project masonry. */
+.img-container{
+  position: relative;
+  display: inline-block;
+}
+.img-container .overlay{
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  transition:opacity 500ms ease-in-out;
+}
+.img-container:hover .overlay{
+  opacity:1;
+}
+.overlay span{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  color:#fff;
+}
+/* ************************************************************* */
+
+
+/* Fullscreen project modal (Image viewer with slider + description) */
+.fullscreen-modal {
+  height: 100%;
+  width: 100%;
+  display: none;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+	background-color: #383838;
+}
+
+.overlay-content {
+  position: relative;
+  top: 25%;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.project-image-viewer{
+  height: 66vh;
+  background-color: rgba(0,0,0,0.66);
+}
+
+.project-image-viewer > img{
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  margin: auto;
+}
+
+.flex-hz-slider{
+  overflow-x: auto;
+  white-space: nowrap;
+  overflow-y: hidden;
+  background-color: rgba(0, 0, 0, 0.66);
+}
+
+.flex-hz-slider-elt{
+  display: inline-block;
+  float: none;
+}
+
+.flex-hz-slider-elt > img{
+  max-height: 90px;
+  max-width: 160px;
+  height: auto;
+}
+
+.zoom-hover:hover{
+  transition: transform .2s;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+/* ************************************************************* */

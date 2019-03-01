@@ -111,3 +111,18 @@
   cursor: pointer;
 }
 /* ************************************************************* */
+
+#home_map{
+  min-width: 300px;
+  min-height: 300px;
+  border-radius: 5px;
+}
+
+.contact-icon{
+  font-size: 2.5em;
+  vertical-align: middle;
+}
+
+.contact-text{
+  vertical-align: middle;
+}

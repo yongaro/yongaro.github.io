@@ -35,12 +35,20 @@ var ProjectId = {
   Vulkan: 8
 };
 
+// Static variables and constants
 const content_dir = "data/images";
 const project_modal_id = "project_fullscreen_modal";
 
 var current_project = -1;
 var current_language = Languages.Fr;
 var project_list = [];
+
+// var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // maxZoom: 19,
+  // attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+// });
+// var home_leaflet_map = L.map('home_map').setView([51.505, -0.09], 13);
+
 
 // This function use
 function configure_project_modal(project_id){
@@ -216,6 +224,31 @@ function load_projects(){
   //     load_projects_from_json(static_project_json_string);
   //   }
   // });
+
+
+  // Setup the location map
+
+  // 43.468771, 3.184393
+  // 43.631, 3.90876
+  var home_leaflet_map = L.map('home_map', {center: [43.631, 3.90876], zoom: 14, scrollWheelZoom: false});
+  var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  });
+  var home_marker = L.marker([43.631, 3.90876]);
+  // home_marker.bindTooltip("Address", {permanent: true, className: "my-label", offset: [0, 0] });
+
+  OpenStreetMap_Mapnik.addTo(home_leaflet_map);
+  home_marker.addTo(home_leaflet_map);
+
+  window.onresize = on_resize;
+}
+
+
+
+function on_resize(){
+  var viewport_display_element = document.getElementById("viewport_res");
+  viewport_display_element.textContent = "Viewport res : " + document.documentElement.clientWidth + "x" + document.documentElement.clientHeight;
 }
 
 
@@ -264,11 +297,3 @@ function is_url(location){
   var url_regex = /https/;
   return url_regex.test(location);
 }
-
-
-
-// Masonry text
-$('.grid').masonry({
-  itemSelector: '.grid-item',
-  columnWidth: 160
-});

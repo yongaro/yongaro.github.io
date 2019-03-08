@@ -55,7 +55,7 @@ const static_project_json_string = '{\
     },\
     {\
       "content" :[\
-        {"type" : "Image", "file" : "SeriousFarm.jpg"}, {"type" : "Image", "file" : "spring.png"}, {"type" : "Image", "file" : "automn.png"}, {"type" : "Image", "file" : "winter.png"}\
+        {"type" : "Image", "file" : "serious_farm.jpg"}, {"type" : "Image", "file" : "spring.png"}, {"type" : "Image", "file" : "automn.png"}, {"type" : "Image", "file" : "winter.png"}\
       ]\
     },\
     {\

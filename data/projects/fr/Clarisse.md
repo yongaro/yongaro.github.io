@@ -11,18 +11,12 @@ Pendant la période d'août 2017 à janvier 2019 j'ai travaillé sur plusieurs f
 * Ajouts de contrôles sur les textures et volumes.
 
 
-Credits
+Credits :
 [https://www.artstation.com/artwork/2x88Px](https://www.artstation.com/artwork/2x88Px)
 [https://www.artstation.com/artwork/ExJ1A](https://www.artstation.com/artwork/ExJ1A)
 [https://www.artstation.com/artwork/8lm4Dm](https://www.artstation.com/artwork/8lm4Dm)
 [https://www.artstation.com/artwork/e8R0D](https://www.artstation.com/artwork/e8R0D)
 [https://www.artstation.com/artwork/2aBVe](https://www.artstation.com/artwork/2aBVe)
 [https://forum.isotropix.com/viewtopic.php?f=8&t=5066](https://forum.isotropix.com/viewtopic.php?f=8&t=5066)
+[https://forum.isotropix.com/viewtopic.php?f=27&t=5080](https://forum.isotropix.com/viewtopic.php?f=27&t=5080)
 [https://www.artstation.com/artwork/8lrgmn](https://www.artstation.com/artwork/8lrgmn)
-
-[//]: # (https://www.youtube.com/watch?v=NtgogEy349Q&feature=youtu.be)
-[//]: # (https://www.youtube.com/watch?v=BdwHVmASffM&feature=youtu.be)
-
-[//]: # (https://forum.isotropix.com/viewtopic.php?f=27&t=5047&sid=86f388b599a030c67c967e5ea5a2430e)
-[//]: # (https://forum.isotropix.com/download/file.php?id=2634&mode=view)
-[//]: # (https://forum.isotropix.com/download/file.php?id=2622&mode=view)

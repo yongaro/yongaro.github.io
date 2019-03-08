@@ -6,7 +6,10 @@ Ce jeu imite et implémente plusieurs fonctionnalités de la série Harvest Moon
 
 * Des cartes animées faite avec l'editeur [Tiled](https://www.mapeditor.org/).
 * Un système de saisons avec changement de carte.
+* Une gestion réaliste de l'arrosage des plantes et du terrain.
+* Des effets météorologiques impactant la croissance des plantes.
 * Un cycle jour nuit réaliste en lien avec les saisons.
+*
 * Une spacialisation des effets sonores réalisée avec [FMOD](https://www.fmod.com/)
 
-[Github](https://github.com/yongaro/SeriousFarm)
+[https://github.com/yongaro/SeriousFarm](https://github.com/yongaro/SeriousFarm)

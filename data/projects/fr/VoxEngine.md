@@ -4,6 +4,7 @@ Un moteur de jeux Minecraft réalisé en OpenGL 4.5 et C++.
 
 Ce projet propose une implémentation différente de plusieurs fonctionnalités :
 
+* Gestion de la fenêtre et des commandes grâce à la bibliothèque [SDL](https://www.libsdl.org/).
 * Les cartes sont gérées par des images 3D.
 * Les blocs sont chargés par [Assimp](http://assimp.org/) et supportent de nombreux types de matériaux différents.
 * Un rendu différé permet d'implémenter des effets comme l'occlusion ambiante.

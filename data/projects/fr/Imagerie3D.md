@@ -6,4 +6,4 @@ Plusieurs Algorithmes de traitement d'images 3D implémentés en C++ :
 * Détection de systèmes vasculaires par propagation depuis un voxel selectionné.
 * Recalage entre scanners d'un même membre sur deux patients différents.
 
-Les résultats montrés sont visualisés depuis [Blender](https://www.blender.org/), [Fiji](https://fiji.sc/), et [CImg](http://www.cimg.eu/).
+Les résultats montrés sont visualisés depuis [Blender](https://www.blender.org/), [Fiji](https://fiji.sc/), ou [CImg](http://www.cimg.eu/).

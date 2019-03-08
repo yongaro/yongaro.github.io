@@ -11,4 +11,4 @@ Ce projet assez complet implémente de nombreuses fonctionnalités :
 * Un système de combat utilisant les stats et types de la génération 6 (X/Y) et implémentant la majorité des mécaniques de la série.
 *  Crossplaftorm (Android, Linux, Mac, Windows).
 
-[Github](https://github.com/yongaro/Pokemon/tree/master/Pokemon-core)
+[https://github.com/yongaro/Pokemon/tree/master/Pokemon-core](https://github.com/yongaro/Pokemon/tree/master/Pokemon-core)

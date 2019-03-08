@@ -230,8 +230,6 @@ function load_projects(){
   load_projects_from_json(static_project_json_string);
   load_projects_descriptions();
 
-  console.log(project_list);
-
 
   // Setup the location map
   // 43.468771, 3.184393 || 43.631, 3.90876

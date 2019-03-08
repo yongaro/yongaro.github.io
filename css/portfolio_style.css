@@ -87,6 +87,14 @@
   margin: auto;
 }
 
+.project-image-viewer > div{
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  margin: auto;
+}
+
 .flex-hz-slider{
   overflow-x: auto;
   white-space: nowrap;

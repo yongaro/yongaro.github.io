@@ -11,16 +11,20 @@
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="third_parties/jquery-3.3.1.min.js"></script>
-  <script src="third_parties/popper-1.14.6.min.js"></script>
+  <!-- <script src="third_parties/popper-1.14.6.min.js"></script> -->
   <script src="third_parties/bootstrap-4.2.1/js/bootstrap.js"></script>
 
   <script src="third_parties/leaflet/leaflet.js"></script>
   <script src="third_parties/leaflet/leaflet-providers.js"></script>
 
+  <script src="third_parties/marked/marked.min.js"></script>
+  <script src="third_parties/vue-dev/dist/vue.min.js"></script>
+
   <script type="text/javascript" src="js/json_backup.js"></script>
   <script type="text/javascript" src="js/portfolio_scripts.js"></script>
 
   <title>Portfolio</title>
+  <link rel="shortcut icon" href="favicon.ico">
 </head>
 
 
@@ -106,7 +110,7 @@
       <div class="col-auto">
         <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.SeriousFarm)">
           <div class="img-container hgb-root project-thumbnail">
-            <img class="project-thumbnail-img hgb-background project-thumbnail" src="data/images/winter.png">
+            <img class="project-thumbnail-img hgb-background project-thumbnail" src="data/images/SeriousFarm1.jpg">
             <div class="overlay"> <span><h3>SeriousFarm</h3></span> </div>
           </div>
         </a>
@@ -175,15 +179,27 @@
           </div>
           <div class="col-auto col-lg-4">
             <div class="d-flex justify-content-between">
-              <h4 id="modal_title">Title</h4>
+              <!-- <h4 id="modal_title">Title</h4> -->
             </div>
 
-            <div id="modal_project_text"></div>
+            <div id="modal_project_desc" v-html="compiledMarkdown"></div>
+            <!-- <div id="modal_project_text"></div> -->
           </div>
         </div>
       </div>
     </div>
   </div>
+
+
+  <!-- <footer> -->
+    <!-- TODO credits + nav links -->
+    <!-- https://github.com/twbs/bootstrap -->
+    <!-- https://github.com/markedjs/marked -->
+    <!-- https://vuejs.org/ -->
+    <!-- https://leafletjs.com/ -->
+    <!-- https://github.com/leaflet-extras/leaflet-providers -->
+    <!-- https://jquery.com/ -->
+  <!-- </footer> -->
 
 </body>
 

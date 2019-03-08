@@ -1,9 +1,8 @@
 var ContentType = {Image: 0, Video: 1};
-var Languages = {En: 0, Fr: 1};
+var Languages = {En: 0, Fr: 1, Count: 2};
 
 class Description{
-  constructor(name, text){
-    this.m_name = name;
+  constructor(text){
     this.m_text = text;
   }
 }
@@ -18,8 +17,8 @@ class Content{
 
 class Project{
   constructor(){
-    this.m_description = [];
-    this.m_content = [];
+    this.m_description = []; // One per language
+    this.m_content = []; // A collection of images and videos
   }
 }
 
@@ -32,22 +31,22 @@ var ProjectId = {
   Pokemon: 5,
   SeriousFarm: 6,
   VoxEngine: 7,
-  Vulkan: 8
+  Vulkan: 8,
+  Count: 9
 };
 
 // Static variables and constants
+const github_raw_url = "https://raw.githubusercontent.com/yongaro/yongaro.github.io/master/";
 const content_dir = "data/images";
 const project_modal_id = "project_fullscreen_modal";
+const languages_folders = ["en", "fr"];
+const projects_names = ["AlgoGeo", "Borderlands", "Clarisse", "Imagerie3D",
+"Mandelbrot", "Pokemon", "SeriousFarm", "VoxEngine", "Vulkan"];
 
 var current_project = -1;
 var current_language = Languages.Fr;
 var project_list = [];
-
-// var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  // maxZoom: 19,
-  // attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-// });
-// var home_leaflet_map = L.map('home_map').setView([51.505, -0.09], 13);
+var project_modal_vue_desc_app;
 
 
 // This function use
@@ -60,8 +59,8 @@ function configure_project_modal(project_id){
 
 
   // Configure the title
-  var modal_header = modal_root.querySelector("#modal_title");
-  modal_header.textContent = project.m_description[current_language].m_name;
+  // var modal_header = modal_root.querySelector("#modal_title");
+  // modal_header.textContent = project.m_description[current_language].m_name;
 
   // Configure the content current content
   configure_project_modal_current_content(modal_root, project.m_content[0]);
@@ -70,7 +69,7 @@ function configure_project_modal(project_id){
   configure_project_modal_image_slider(modal_root, project_id);
 
   // Clear and configure the modal text.
-  configure_project_modal_text(modal_root, project);
+  configure_project_modal_text(project);
 }
 
 
@@ -173,19 +172,8 @@ function configure_project_modal_image_slider(modal_root, project_id){
 }
 
 
-function configure_project_modal_text(modal_root, project){
-  var modal_text = modal_root.querySelector("#modal_project_text");
-
-  // First completely clear the text div
-  while(modal_text.firstChild){
-    modal_text.removeChild(modal_text.firstChild);
-  }
-
-  var text_element = document.createElement("p");
-  text_element.className = "text-white"
-  // text_element.textContent = project.m_description[current_language].m_text;
-  text_element.innerHTML = "<p>" + project.m_description[current_language].m_text + "</p>";
-  modal_text.appendChild(text_element);
+function configure_project_modal_text(project){
+  project_modal_vue_desc_app.$set(project_modal_vue_desc_app.$data, "input", project.m_description[current_language].m_text);
 }
 
 
@@ -195,8 +183,8 @@ function load_projects_from_json(string_data){
   for(var itp = 0; itp < data.projects.length; ++itp){
     var temp_project = new Project();
     // Load descriptions to the current project.
-    for(var itd = 0; itd < data.projects[itp].description.length; ++itd){
-      temp_project.m_description.push( new Description(data.projects[itp].description[itd].name, data.projects[itp].description[itd].text) );
+    for(var itd = 0; itd < Languages.Count; ++itd){
+      temp_project.m_description.push(new Description("empty"));
     }
 
     // Load content to the current project.
@@ -210,27 +198,44 @@ function load_projects_from_json(string_data){
 }
 
 
+function load_projects_descriptions(){
+  var dataType = "text";
+  var url = "";
+  var async = true;
+
+  for(var pid = 0; pid < ProjectId.Count; ++pid){
+    for(var l = 0; l < Languages.Count; ++l){
+      if( l == Languages.En ){ continue; }
+      url = github_raw_url + "data/projects/" + languages_folders[l] + "/" + projects_names[pid] + ".md";
+      request_project_description(url, dataType, async, project_list[pid], l);
+    }
+  }
+}
+
+function request_project_description(url, dataType, async, project, language){
+  $.ajax({
+    url: url,
+    dataType: dataType,
+    async: async,
+    success: function(data, textStatus, jqXHR){
+      project.m_description[language].m_text = data;
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      console.log(errorThrown);
+    }
+  });
+}
+
 function load_projects(){
   load_projects_from_json(static_project_json_string);
-  // $.ajax({
-  //   url: "https://raw.githubusercontent.com/yongaro/yongaro.github.io/master/data/json/portfolio_data.json",
-  //   dataType: "text",
-  //   async: true,
-  //   success: function(data, textStatus, jqXHR){
-  //     load_projects_from_json(data);
-  //    },
-  //   error: function(jqXHR, textStatus, errorThrown){
-  //     // Use an improvised dirty local backup instead of the github json
-  //     load_projects_from_json(static_project_json_string);
-  //   }
-  // });
+  load_projects_descriptions();
+
+  console.log(project_list);
 
 
   // Setup the location map
-
-  // 43.468771, 3.184393
-  // 43.631, 3.90876
-  var home_leaflet_map = L.map('home_map', {center: [43.631, 3.90876], zoom: 14, scrollWheelZoom: false});
+  // 43.468771, 3.184393 || 43.631, 3.90876
+  var home_leaflet_map = L.map('home_map', {center: [43.631, 3.90876], zoom: 14, scrollWheelZoom: false, dragging: false});
   var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -241,27 +246,38 @@ function load_projects(){
   OpenStreetMap_Mapnik.addTo(home_leaflet_map);
   home_marker.addTo(home_leaflet_map);
 
-  window.onresize = on_resize;
+  // window.onresize = on_resize;
+
+
+  project_modal_vue_desc_app = new Vue({
+    el: '#modal_project_desc',
+    data: {
+      input: "**Default Vue app Markdown**"
+    },
+    computed: {
+      compiledMarkdown: function(){
+        return marked(this.input, {sanitize: true});
+      },
+      methods: {
+        setInput: function(newInput){ this.input = newInput; }
+      }
+    }
+  });
 }
 
 
 
-function on_resize(){
-  var viewport_display_element = document.getElementById("viewport_res");
-  viewport_display_element.textContent = "Viewport res : " + document.documentElement.clientWidth + "x" + document.documentElement.clientHeight;
-}
-
-
-function toggle_project_modal(bool_open){
-  document.getElementById("project_fullscreen_modal").style.display = bool_open ? "block" : "none";
-}
 
 function openNav() {
   document.getElementById("project_fullscreen_modal").style.display = "block";
+  $('body').css({'overflow':'hidden'});
+  $(document).bind('scroll',function (){ window.scrollTo(0,0); });
 }
 
 function closeNav() {
   document.getElementById("project_fullscreen_modal").style.display = "none";
+  $(document).unbind('scroll');
+  $('body').css({'overflow':'visible'});
 }
 
 
@@ -296,4 +312,16 @@ function is_youtube_video_url(url){
 function is_url(location){
   var url_regex = /https/;
   return url_regex.test(location);
+}
+
+
+// dataType is "text" or "json"
+function request_server_file(url, dataType, async, success, error){
+  $.ajax({
+    url: url,
+    dataType: dataType,
+    async: async,
+    success: success(data, textStatus, jqXHR),
+    error: error(jqXHR, textStatus, errorThrown)
+  });
 }

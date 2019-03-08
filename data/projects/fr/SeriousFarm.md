@@ -9,7 +9,6 @@ Ce jeu imite et implémente plusieurs fonctionnalités de la série Harvest Moon
 * Une gestion réaliste de l'arrosage des plantes et du terrain.
 * Des effets météorologiques impactant la croissance des plantes.
 * Un cycle jour nuit réaliste en lien avec les saisons.
-*
 * Une spacialisation des effets sonores réalisée avec [FMOD](https://www.fmod.com/)
 
 [https://github.com/yongaro/SeriousFarm](https://github.com/yongaro/SeriousFarm)

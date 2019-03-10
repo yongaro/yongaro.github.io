@@ -87,11 +87,16 @@ function configure_project_modal_current_content(modal_root, content){
   var content_element;
 
   if(content.m_type == ContentType.Image){
+    var content_src = "";
     content_element = document.createElement("img");
-    // content_element.className = "img-fluid d-block mx-auto"; // temp solution for centering the image.
 
-    if( location_is_url ){ content_element.src = content.m_location; }
-    else{ content_element.src = content_dir + "/" + content.m_location; }
+    if( location_is_url ){ content_src = content.m_location; }
+    else{ content_src = content_dir + "/" + content.m_location; }
+
+    content_element.src = content_src;
+    content_element.setAttribute("onclick", "open_fullscreen_image_viewer('" + content_src + "')");
+    content_element.style.cursor = "zoom-in"
+
 
     modal_current_content.appendChild(content_element);
   }
@@ -279,6 +284,15 @@ function closeNav() {
 }
 
 
+function open_fullscreen_image_viewer(img_src){
+  document.getElementById("fullscreen_image_viewer").style.display = "flex";
+  document.getElementById("fullscreen_image_viewer_image").src = img_src;
+}
+
+function close_fullscreen_image_viewer(){
+  document.getElementById("fullscreen_image_viewer").style.display = "none";
+}
+
 function get_content_type(type_string){
   if( type_string == "Image" ){ return ContentType.Image; }
   if( type_string == "Video" ){ return ContentType.Video; }
@@ -310,16 +324,4 @@ function is_youtube_video_url(url){
 function is_url(location){
   var url_regex = /https/;
   return url_regex.test(location);
-}
-
-
-// dataType is "text" or "json"
-function request_server_file(url, dataType, async, success, error){
-  $.ajax({
-    url: url,
-    dataType: dataType,
-    async: async,
-    success: success(data, textStatus, jqXHR),
-    error: error(jqXHR, textStatus, errorThrown)
-  });
 }

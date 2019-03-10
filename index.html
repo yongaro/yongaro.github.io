@@ -171,23 +171,25 @@
 
       <div class="container-fluid">
         <div class="row">
-          <div class="col-auto col-lg-8">
+          <div class="col-auto col-xl-8">
             <div class="project-image-viewer p-3" id="modal_current_content"></div>
             <div class="flex-hz-slider">
               <div class="d-flex justify-content-start align-items-center" id="modal_image_slider"></div>
             </div>
           </div>
-          <div class="col-auto col-lg-4">
+          <div class="col-auto col-xl-4">
             <div class="d-flex justify-content-between">
-              <!-- <h4 id="modal_title">Title</h4> -->
             </div>
 
             <div id="modal_project_desc" v-html="compiledMarkdown"></div>
-            <!-- <div id="modal_project_text"></div> -->
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="fullscreen_image_viewer" class="fullscreen-image-viewer" onclick="close_fullscreen_image_viewer()">
+    <img id="fullscreen_image_viewer_image"></img>
   </div>
 
 

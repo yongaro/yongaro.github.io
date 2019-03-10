@@ -9,6 +9,6 @@ Ce projet assez complet implémente de nombreuses fonctionnalités :
 * Des personnages et pokemon animés .
 * Un système d'intéractions avec des PNJ (combat à vue, animations lors des dialogues, etc).
 * Un système de combat utilisant les stats et types de la génération 6 (X/Y) et implémentant la majorité des mécaniques de la série.
-*  Crossplaftorm (Android, Linux, Mac, Windows).
+* Crossplaftorm (Android, Linux, Mac, Windows) et géré avec [Gradle](https://gradle.org/).
 
 [https://github.com/yongaro/Pokemon/tree/master/Pokemon-core](https://github.com/yongaro/Pokemon/tree/master/Pokemon-core)

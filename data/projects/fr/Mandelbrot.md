@@ -1,5 +1,6 @@
 # Mandelbrot
 
+
 Projet OpenGL 1 de L2 informatique permettant de visualiser les fractales de Mandelbrot et de Julia.
 Ce programme implémente également la variante Buddhabrot et plusieurs types d'interaction :
 

@@ -1,5 +1,6 @@
 # Clarisse iFX
 
+
 [Clarisse](https://www.isotropix.com/products/clarisse/ifx) est une suite logicielle destinée aux professionnels de l'image et à la réalisation de films.
 
 Pendant la période d'août 2017 à janvier 2019 j'ai travaillé sur plusieurs fonctionnalités de cette ligne de produits dont les suivantes :

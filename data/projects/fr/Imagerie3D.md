@@ -1,5 +1,6 @@
 # Imagerie 3D
 
+
 Plusieurs Algorithmes de traitement d'images 3D implémentés en C++ :
 
 * Extraction de volumes et de surfaces par seuillage et marching cube.

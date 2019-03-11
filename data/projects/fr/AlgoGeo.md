@@ -1,4 +1,4 @@
-# Algorithmes de géométrie
+## Algorithmes de géométrie
 
 Une collection de plusieurs algorithmes de traitement de la géométrie.
 Implémentés individuellement en C++ et OpenGL 3 on peut lister ici :

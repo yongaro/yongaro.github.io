@@ -1,6 +1,8 @@
 # Lua Bender
 
-## **Description**
+
+
+
 
 Lua bender is a header only library that helps generate bindings of C++ functions and classes to Lua.
 
@@ -19,12 +21,32 @@ However this API has some drawbacks that can become a real problem quite early i
 
 The main downside is the generic function binding systems.  
 To boldly sum up the process, the Lua API only register C functions with the following signature.
+
 > ```cpp
 > typedef int (*lua_CFunction) (lua_State *L);
 > ```
 
 This means that any given C/C++ function must be **manually** wrapped by a lua_CFunction
 that will handle, argument loading from the Lua state, function dispatching, and result transmission back to Lua if necessary.
+
+
+    <pre><code class="html">
+    // Some random no brain operation
+    double some_func(double arg1, int arg2){
+        return arg1 + arg2;
+    }
+
+    int some_func_binding(lua_State* L){
+        double a1  = luaL_checknumber(L, -1);
+        int    a2  = luaL_checkinteger(L, -2);
+        double res = some_func(a1, a2);
+        lua_pushnumber(L, res);
+        return 1; // The number of returned values.
+    }
+
+    
+    luaL_Reg binding = {"some_func", some_func_binding};
+    </code></pre>
 
 > ```cpp
 > // Some random no brain operation
@@ -279,49 +301,3 @@ lua_close(L);
 // Results are still valid past this point.
 ```
 
-### **5. Complete test**
-
-All those concepts are implemented and easily executable from the **test.hpp** header.  
-Further documentation can be found in the other headers for more in depth under
-
-
-## **License**
-
-This project is distributed under the **Apache License 2.0** see the complete text in the **LICENSE** text file for more information.
-
-## **Bonus for CMake users.**
-
-As of **Lua 5.3.5**, the C API comes with only support for the **GNU Make** build system which is quite inconvenient for cross-platform projects.
-
-Below is quick and dirty **CMakeLists.txt** for the beginners who would want a quick start with a Lua static build using CMake.  
-
-```CMake
-cmake_minimum_required(VERSION 3.12)
-
-file(GLOB_RECURSE SRC_LIB src/*.c)
-
-add_library(liblua_static STATIC ${SRC_LIB})
-target_link_libraries(liblua_static ${LIBS})
-```
-
-The Lua C source code will comme with the following architecture : 
-
-root /
-- doc / 
-- src /
-- Makefile
-- README
-
-Simply put this script to the root directory and add it to your main project along with the **src** to your include system.
-
-```CMake
-set(LUA_ROOT "${THIRD_PARTIES_ROOT}/lua-5.3.5")
-add_subdirectory("${LUA_ROOT}")
-include_directories("${LUA_ROOT}/src")
-```
-
-## **Other projects and contact**
-
-If this library was of some use, you may be interested in some of my others projects described on my github page, along with informations to contact me if necessary.  
-
-[https://yongaro.github.io/](https://yongaro.github.io/)

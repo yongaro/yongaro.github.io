@@ -42,6 +42,9 @@ const static_project_json_string = '{\
       ]\
     },\
     {\
+      "content" : []\
+    },\
+    {\
       "content" :[\
         {"type" : "Image", "file" : "m6.png"}, {"type" : "Image", "file" : "m3.png"}, {"type" : "Image", "file" : "julia.png"}, {"type" : "Image", "file" : "budha.jpg"},\
         {"type" : "Image", "file" : "m2.png"}, {"type" : "Image", "file" : "m5.png"}, {"type" : "Image", "file" : "m4.png"}, {"type" : "Image", "file" : "m1.png"}\

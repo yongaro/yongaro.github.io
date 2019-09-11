@@ -27,49 +27,84 @@ var ProjectId = {
   Borderlands: 1,
   Clarisse: 2,
   Imagerie3D: 3,
-  Mandelbrot: 4,
-  Pokemon: 5,
-  SeriousFarm: 6,
-  VoxEngine: 7,
-  Vulkan: 8,
-  Count: 9
+  LuaBender: 4,
+  Mandelbrot: 5,
+  Pokemon: 6,
+  SeriousFarm: 7,
+  VoxEngine: 8,
+  Vulkan: 9,
+  Count: 10
 };
+
+const projects_names = [
+  "AlgoGeo",
+  "Borderlands",
+  "Clarisse",
+  "Imagerie3D",
+  "LuaBender",
+  "Mandelbrot",
+  "Pokemon",
+  "SeriousFarm",
+  "VoxEngine",
+  "Vulkan"
+];
+
 
 // Static variables and constants
 const github_raw_url = "https://raw.githubusercontent.com/yongaro/yongaro.github.io/master/";
 const content_dir = "data/images";
-const project_modal_id = "project_fullscreen_modal";
+
 const languages_folders = ["en", "fr"];
-const projects_names = ["AlgoGeo", "Borderlands", "Clarisse", "Imagerie3D",
-"Mandelbrot", "Pokemon", "SeriousFarm", "VoxEngine", "Vulkan"];
+
 
 var current_project = -1;
-var current_language = Languages.Fr;
+var current_language = Languages.En;
 var project_list = [];
-var project_modal_vue_desc_app;
-
 
 // This function use
 function configure_project_modal(project_id){
-  if( current_project != project_id)
-  var project = project_list[project_id];
-  var modal_root = document.getElementById(project_modal_id);
+  if (current_project != project_id) {
+    var project = project_list[project_id];
 
-  openNav();
+    if (project.m_content.length > 0) {
+      const project_modal_id = "project_modal";
+      var modal_root = document.getElementById(project_modal_id);
 
+      // Open the fullscreen modal.
+      open_modal_element(modal_root);
+      
+      // Configure the content current content
+      configure_project_modal_current_content(modal_root, project.m_content[0]);
 
-  // Configure the title
-  // var modal_header = modal_root.querySelector("#modal_title");
-  // modal_header.textContent = project.m_description[current_language].m_name;
+      // Clear and configure the image slider
+      configure_project_modal_image_slider(project_modal_id, modal_root, project_id);
 
-  // Configure the content current content
-  configure_project_modal_current_content(modal_root, project.m_content[0]);
+      // Compile the project markdown description and give the html code to the description element.
+      var project_desc = modal_root.querySelector("#modal_project_desc");
+      project_desc.innerHTML = marked(project.m_description[current_language].m_text);
 
-  // Clear and configure the image slider
-  configure_project_modal_image_slider(modal_root, project_id);
+      // Use highlight js to properly handle the potential code sections syntax highlighting.
+      project_desc.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+      });
+    }
+    else {
+      const project_modal_text_only_id = "project_text_only_modal";
+      var modal_root = document.getElementById(project_modal_text_only_id);
 
-  // Clear and configure the modal text.
-  configure_project_modal_text(project);
+      // Open the fullscreen modal.
+      open_modal_element(modal_root);
+
+      // Compile the project markdown description and give the html code to the description element.
+      var project_desc = modal_root.querySelector("#text_only_modal_project_desc");
+      project_desc.innerHTML = marked(project.m_description[current_language].m_text);
+
+      // Use highlight js to properly handle the potential code sections syntax highlighting.
+      project_desc.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+      });
+    }
+  }
 }
 
 
@@ -95,7 +130,7 @@ function configure_project_modal_current_content(modal_root, content){
 
     content_element.src = content_src;
     content_element.setAttribute("onclick", "open_fullscreen_image_viewer('" + content_src + "')");
-    content_element.style.cursor = "zoom-in"
+    content_element.style.cursor = "zoom-in";
 
 
     modal_current_content.appendChild(content_element);
@@ -116,15 +151,15 @@ function configure_project_modal_current_content(modal_root, content){
 
 function slider_element_onclick(modal_id, project_id, content_id){
   var project = project_list[project_id];
-  var modal_root = document.getElementById(modal_id);
+  // var modal_root = document.getElementById(modal_id);
   var content = project.m_content[content_id];
   configure_project_modal_current_content(modal_id, content);
 }
 
 
-function configure_project_modal_image_slider(modal_root, project_id){
+function configure_project_modal_image_slider(project_modal_id, modal_root, project_id){
   var project = project_list[project_id];
-  var modal_current_content = modal_root.querySelector("#modal_current_content");
+  // var modal_current_content = modal_root.querySelector("#modal_current_content");
 
   // Clear and configure the image slider
   var modal_image_slider = modal_root.querySelector("#modal_image_slider");
@@ -177,11 +212,6 @@ function configure_project_modal_image_slider(modal_root, project_id){
 }
 
 
-function configure_project_modal_text(project){
-  project_modal_vue_desc_app.$set(project_modal_vue_desc_app.$data, "input", project.m_description[current_language].m_text);
-}
-
-
 function load_projects_from_json(string_data){
   var data = JSON.parse(string_data);
 
@@ -210,7 +240,7 @@ function load_projects_descriptions(){
 
   for(var pid = 0; pid < ProjectId.Count; ++pid){
     for(var l = 0; l < Languages.Count; ++l){
-      if( l == Languages.En ){ continue; }
+      if( l == Languages.Fr ){ continue; }
       url = github_raw_url + "data/projects/" + languages_folders[l] + "/" + projects_names[pid] + ".md";
       request_project_description(url, dataType, async, project_list[pid], l);
     }
@@ -231,57 +261,49 @@ function request_project_description(url, dataType, async, project, language){
   });
 }
 
-function load_projects(){
+function load_projects() {
   load_projects_from_json(static_project_json_string);
   load_projects_descriptions();
 
 
   // Setup the location map
-  // 43.468771, 3.184393 || 43.631, 3.90876
-  var home_leaflet_map = L.map('home_map', {center: [43.631, 3.90876], zoom: 14, scrollWheelZoom: false, dragging: false});
+  // 43.468771, 3.184393 || 43.631, 3.90876 || zoom 14 // dunno
+  // 43.423233, 3.2201016 || zoom 12 St genies de fontedit
+  // 43.3397709, 3.214989 || Béziers
+  var home_leaflet_map = L.map('home_map',{ center: [43.3823759,3.202865], zoom: 11, scrollWheelZoom: false, dragging: false});
   var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   });
-  var home_marker = L.marker([43.631, 3.90876]);
-  // home_marker.bindTooltip("Address", {permanent: true, className: "my-label", offset: [0, 0] });
+  var home_marker = L.marker([43.423233,3.2201016]);
+  // home_marker.bindTooltip("NAME", { permanent: true,className: "home_label",offset: [0,0] });
+  home_marker.bindTooltip( {permanent: true, className: "home_label", offset: [0, 0] });
 
   OpenStreetMap_Mapnik.addTo(home_leaflet_map);
   home_marker.addTo(home_leaflet_map);
-
-  // window.onresize = on_resize;
-
-
-  project_modal_vue_desc_app = new Vue({
-    el: '#modal_project_desc',
-    data: {
-      input: "**Default Vue app Markdown**"
-    },
-    computed: {
-      compiledMarkdown: function(){
-        return marked(this.input, {sanitize: true});
-      },
-      methods: {
-        setInput: function(newInput){ this.input = newInput; }
-      }
-    }
-  });
 }
 
 
-
-
-function openNav() {
-  document.getElementById("project_fullscreen_modal").style.display = "block";
-  $('body').css({'overflow':'hidden'});
-  $(document).bind('scroll',function (){ window.scrollTo(0,0); });
+function open_modal_element(modal_element) {
+  modal_element.style.display = "block";
+  $('body').css({ 'overflow': 'hidden' });
+  $(document).bind('scroll',function () { window.scrollTo(0,0); });
 }
 
-function closeNav() {
-  document.getElementById("project_fullscreen_modal").style.display = "none";
+function close_modal_element(modal_element) {
+  modal_element.style.display = "none";
   $(document).unbind('scroll');
-  $('body').css({'overflow':'visible'});
+  $('body').css({ 'overflow': 'visible' });
 }
+
+
+function close_modal_by_id(modal_id) {
+  document.getElementById(modal_id).style.display = "none";
+  $(document).unbind('scroll');
+  $('body').css({ 'overflow': 'visible' });
+}
+
+
 
 
 function open_fullscreen_image_viewer(img_src){

@@ -11,7 +11,7 @@
 .theme-hover{ background-color: #984B43; }
 .theme-active{ color: #EAC67A; }
 
-body{ background-color: black; }
+body{ background-color: #383838 }
 div, p, h1, h2, h3, h4, h5, h6{ color: white; }
 a{ color: #EAC67A; }
 a:hover{ color: #EAC67A; }
@@ -52,7 +52,6 @@ a:hover{ color: #EAC67A; }
     min-height: 225px;
   }
 }
-
 
 /* Custom navbar positionned on top for mobiles and on side for everyone else */
 /* Top sidebar */

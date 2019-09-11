@@ -13,4 +13,4 @@ You can see here a demonstration of several 3D images processing algorithms impl
   This technique is usefull to either compare medical data from two patients or use CT scans of the same person but from different hardware.
 
 
-The images were loaded and processed using the [CImg](http://www.cimg.eu/) C++ library and the surfaces are rendered either with [Blender](https://www.blender.org/) or [Fiji](https://fiji.sc/).
+The images were loaded and processed using the [**CImg**](http://www.cimg.eu/) C++ library and the surfaces are rendered either with [**Blender**](https://www.blender.org/) or [**Fiji**](https://fiji.sc/).

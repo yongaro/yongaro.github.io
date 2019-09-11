@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="third_parties/fontawesome-free-5.7.2/css/all.min.css">
   <link rel="stylesheet" href="third_parties/leaflet/leaflet.css">
+  <link rel="stylesheet" href="third_parties/highlight/styles/dracula.css">
   <link rel="stylesheet" href="css/portfolio_style.css">
 
 
@@ -17,8 +18,9 @@
   <script src="third_parties/leaflet/leaflet.js"></script>
   <script src="third_parties/leaflet/leaflet-providers.js"></script>
 
+  <script src="third_parties/highlight/highlight.pack.js"></script>
   <script src="third_parties/marked/marked.min.js"></script>
-  <script src="third_parties/vue-dev/dist/vue.min.js"></script>
+  <!-- <script src="third_parties/vue-dev/dist/vue.min.js"></script> -->
 
   <script type="text/javascript" src="js/json_backup.js"></script>
   <script type="text/javascript" src="js/portfolio_scripts.js"></script>
@@ -31,14 +33,15 @@
 
 <body onload="load_projects()">
   <div class="sidebar">
-    <div> <h5>Yoann Ongaro</h5><p class="theme-font-alt">Ingénieur rendu junior</p> </div>
-    <a href="#projects">Projets et contributions</a>
+    <div> <h5>Yoann Ongaro</h5><p class="theme-font-alt">Junior rendering engineer</p> </div>
+    <a href="#projects">Projects and contributions</a>
     <a href="#contact">Contact</a>
+    <a href="#about-this-website">About</a>
   </div>
 
 
   <div class="content container-fluid" id="projects">
-    <h2>Projets et contributions</h2>
+    <h2>Projects and contributions</h2>
     <div class="row justify-content-start align-items-center no-gutters">
 
 
@@ -46,7 +49,7 @@
         <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.Imagerie3D)">
           <div class="img-container hgb-root project-thumbnail">
             <img class="project-thumbnail-img hgb-background project-thumbnail" src="data/images/e3.png"></img>
-            <div class="overlay"> <span><h4>Imagerie 3D</h4></span> </div>
+            <div class="overlay"> <span><h4>3D image processing</h4></span> </div>
           </div>
         </a>
       </div>
@@ -91,7 +94,7 @@
         <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.AlgoGeo)">
           <div class="img-container hgb-root project-thumbnail">
             <img class="project-thumbnail-img hgb-background" src="data/images/cc2.png">
-            <div class="overlay"> <span><h3>Algos de géométries</h3></span> </div>
+            <div class="overlay"> <span><h3>Geometry processing</h3></span> </div>
           </div>
         </a>
       </div>
@@ -108,10 +111,10 @@
         </a>
       </div>
       <div class="col-auto">
-        <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.SeriousFarm)">
+        <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.LuaBender)">
           <div class="img-container hgb-root project-thumbnail">
-            <img class="project-thumbnail-img hgb-background" src="data/images/serious_farm.jpg">
-            <div class="overlay"> <span><h3>SeriousFarm</h3></span> </div>
+            <img class="project-thumbnail-img hgb-background" src="data/images/lua_logo.png">
+            <div class="overlay"> <span><h3>Lua Bender</h3></span> </div>
           </div>
         </a>
       </div>
@@ -131,9 +134,11 @@
   <div class="content container-fluid py-4" id="contact">
     <h2>Contact</h2>
     <div>
-      Je suis ingénieur rendu junior, spécialisé dans le traitement d'images et la programmation 3D, et vivant en France dans la région de Montpellier.<br>
-      Vous pouvez me contacter avec les informations suivantes.
+      I am a C/C++ programmer specialized in 3D and image processing.<br>
+      As you can see on this page, I have a passion for many subjects related to video games, and also some for photography as well.<br>
+      I live in France in a small village near Béziers and you can contact me with the following informations.
     </div>
+
     <div class="row no-gutters my-4 justify-content-start">
       <div class="col-12 col-lg-5" style="min-width:300px;">
         <div class="d-flex flex-column align-items-center">
@@ -160,13 +165,62 @@
     </div>
   </div>
 
+  <div class="content container-fluid py-4" id="about-this-website">
+    <h2>About this website</h2>
+
+    <div class="py-3">This page was created using the following third parties.</div>
+    <div class="row justify-content-start align-items-center">
+      <div class="col-auto">
+        <a href="https://github.com/twbs/bootstrap">
+        <span><img src="./data/images/bootstrap.png" width="80vw"></img></span>
+        Bootstrap
+        </a>
+      </div>
+
+      <div class="col-auto">
+        <a href="./data/images/markdown-2.png">
+          <span><img src="./data/images/markdown-2.png" width="80vw"></img></span>
+          Marked
+        </a>
+      </div>
+
+      <div class="col-auto">
+        <a href="https://highlightjs.org/">
+          <span><img src="./data/images/highlightjs.png" width="70vw" style="border-radius: 10px;"></img></span>
+          Highlight.js
+        </a>
+      </div>
+
+      <div class="col-auto">
+        <a href="https://leafletjs.com/">
+          <span><img src="./data/images/leaflet-3.jfif" width="70vw" style="border-radius: 10px;"></img></span>
+          Leaflet
+        </a>
+      </div>
+
+      <div class="col-auto">
+        <a href="https://github.com/leaflet-extras/leaflet-providers">
+          <span><img src="./data/images/leaflet-3.jfif" width="70vw" style="border-radius: 10px;"></img></span>
+          Leaflet providers
+        </a>
+      </div>
+
+      <div class="col-auto">
+        <a href="https://jquery.com/">
+          <span><img src="./data/images/jquery.png" width="80vw"></img></span>
+          JQuery
+        </a>
+      </div>
+    </div>
+  </div>>
 
 
-  <div id="project_fullscreen_modal" class="fullscreen-modal">
+
+  <div id="project_modal" class="project-modal">
     <div class="container-fluid p-3">
 
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-danger" onclick="closeNav()">Fermer</button>
+        <button type="button" class="btn btn-danger" onclick="close_modal_by_id('project_modal')">Fermer</button>
       </div>
 
       <div class="container-fluid">
@@ -188,8 +242,24 @@
     </div>
   </div>
 
-  <div id="fullscreen_image_viewer" class="fullscreen-image-viewer" onclick="close_fullscreen_image_viewer()">
+  <div id="fullscreen_image_viewer" class="image-viewer-modal" onclick="close_fullscreen_image_viewer()">
     <img id="fullscreen_image_viewer_image"></img>
+  </div>
+
+
+  <div id="project_text_only_modal" class="project-modal">
+    <div class="container-fluid p-3">
+  
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" onclick="close_modal_by_id('project_text_only_modal')">Close</button>
+      </div>
+      
+      <div class="row">
+        <div class="col-auto col-lg-1"></div>
+        <div class="col-auto col-lg-9" id="text_only_modal_project_desc"></div>
+        <div class="col-auto col-lg-1"></div>
+      </div>
+    </div>
   </div>
 
 
@@ -197,7 +267,7 @@
     <!-- TODO credits + nav links -->
     <!-- https://github.com/twbs/bootstrap -->
     <!-- https://github.com/markedjs/marked -->
-    <!-- https://vuejs.org/ -->
+    <!-- https://highlightjs.org/ -->
     <!-- https://leafletjs.com/ -->
     <!-- https://github.com/leaflet-extras/leaflet-providers -->
     <!-- https://jquery.com/ -->

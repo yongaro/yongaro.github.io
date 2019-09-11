@@ -1,12 +1,12 @@
 # [**Clarisse iFX** <img src="./data/images/link-icon-2.png" width="25"/>](https://www.isotropix.com/products/clarisse/ifx)
-Clarisse is a CG toolset developped by [Istropix](https://www.isotropix.com/), a French startup located in Montpellier and mainly aimed towards the movie industry.  
+Clarisse is a CG toolset developped by [**Istropix**](https://www.isotropix.com/), a French startup located in Montpellier and mainly aimed towards the movie industry.  
 
 This cross-platform software is especially good for easily creating large environments with highly complex geometry.  
 It also fits in the current VFX workflows by allowing the direct use of all the industry formats and producing a high quality render usable in the various compositing software.
 
 I worked for Isotropix from August 2017 to January 2019 as a junior rendering engineer on several features :
 
-* Improvements to the [OpenVDB](https://www.openvdb.org/) volumes motion blur.
+* Improvements to the [**OpenVDB**](https://www.openvdb.org/) volumes motion blur.
 * Optimisations of the acceleration structure for hairs and furs allowing faster renders.
 * Adding new geometry displacements ways.
 * Adding helpers for rendering time diagnostic.

@@ -11,7 +11,7 @@ The only dependencies for this project are Lua 5.3.5 and C++ 17.
 
 Below is a quick introduction to the problems this projects aims to solve and a short description of the various features.  
 
-**The library and a more complete description and set of examples can be found on the [git repository](https://github.com/yongaro/lua_bender).**
+The library and a more complete description and set of examples can be found on the [**git repository**](https://github.com/yongaro/lua_bender).
 
 ## **Introduction**
 

@@ -20,9 +20,10 @@
 
   <script src="third_parties/highlight/highlight.pack.js"></script>
   <script src="third_parties/marked/marked.min.js"></script>
-  <!-- <script src="third_parties/vue-dev/dist/vue.min.js"></script> -->
+  <script src="third_parties/Datejs/build/date-en-CA.js"></script>
 
   <script type="text/javascript" src="js/json_backup.js"></script>
+  <script type="text/javascript" src="js/github_scripts.js"></script>
   <script type="text/javascript" src="js/portfolio_scripts.js"></script>
 
   <title>Portfolio</title>
@@ -35,6 +36,7 @@
   <div class="sidebar">
     <div> <h5>Yoann Ongaro</h5><p class="theme-font-alt">Junior rendering engineer</p> </div>
     <a href="#projects">Projects and contributions</a>
+    <a href="#recent_activity">Recent github activity</a>
     <a href="#contact">Contact</a>
     <a href="#about-this-website">About</a>
   </div>
@@ -113,7 +115,7 @@
       <div class="col-auto">
         <a href="javascript:void(0)" onclick="configure_project_modal(ProjectId.LuaBender)">
           <div class="img-container hgb-root project-thumbnail">
-            <img class="project-thumbnail-img hgb-background" src="data/images/lua_logo.png">
+            <img class="project-thumbnail-img hgb-background" src="data/images/lua_logo_w.png">
             <div class="overlay"> <span><h3>Lua Bender</h3></span> </div>
           </div>
         </a>
@@ -131,11 +133,21 @@
     </div>
   </div>
 
+  <div class="content container-fluid py-4" id="recent_activity">
+    <h2>Recent github activity</h2>
+
+    <div id="github_push_events">
+      <div class="loader"></div>
+      <div style="text-align:center;"><strong>Loading push events from the github API</strong></div>
+    </div>
+
+  </div>
+
   <div class="content container-fluid py-4" id="contact">
     <h2>Contact</h2>
     <div>
       I am a C/C++ programmer specialized in 3D and image processing.<br>
-      As you can see on this page, I have a passion for many subjects related to video games, and also some for photography as well.<br>
+      As you can see on this page, I have a passion for many subjects related to video games, and also some for photography and electronics as well.<br>
       I live in France in a small village near Béziers and you can contact me with the following informations.
     </div>
 
@@ -152,12 +164,16 @@
           </div>
 
           <div class="my-3">
-            <span class="contact-text mx-2"><i class="fab fa-github contact-icon mx-1"></i><a href="https://github.com/yongaro">GitHub</a></span>
+            <span class="contact-text mx-2"><i class="fab fa-github-square contact-icon mx-1"></i><a href="https://github.com/yongaro">GitHub</a></span>
             <span class="contact-text mx-2"><i class="fab fa-linkedin contact-icon mx-1"></i><a href="https://www.linkedin.com/in/yoann-ongaro-9b3251144/">Linkedin</a></span>
           </div>
           <div class="my-3">
             <i class="fas fa-file-pdf contact-icon"></i>
-            <span class="contact-text"><a href="data/cv.pdf">CV</a></span>
+            <span class="contact-text">Resume <a href="https://drive.google.com/file/d/1SipraYPYteGon50Y_JCqnqIhlN4EDai1/view?usp=sharing">Fr</a> | <a href="https://drive.google.com/file/d/1ljoFZL4ocdkwM5DrbwZ5W9UVV7ZbrG5l/view?usp=sharing">En</a></span>
+          </div>
+          <div class="my-3">
+            <i class="fab fa-flickr contact-icon"></i>
+            <span class="contact-text"><a href="https://www.flickr.com/photos/186425881@N07/">Flick photostream</a></span>
           </div>
         </div>
       </div>
@@ -172,47 +188,62 @@
     <div class="row justify-content-start align-items-center">
       <div class="col-auto">
         <a href="https://github.com/twbs/bootstrap">
-        <span><img src="./data/images/bootstrap.png" width="80vw"></img></span>
+        <span><img src="./data/images/bootstrap.png" width="25vw"></img></span>
         Bootstrap
         </a>
       </div>
 
       <div class="col-auto">
-        <a href="./data/images/markdown-2.png">
-          <span><img src="./data/images/markdown-2.png" width="80vw"></img></span>
+        <a href="https://marked.js.org/#/README.md#README.md">
+          <span><img src="./data/images/markdown-2.png" width="25vw"></img></span>
           Marked
         </a>
       </div>
 
       <div class="col-auto">
+        <a href="https://github.com/datejs/Datejs">
+          <span><img src="https://avatars3.githubusercontent.com/u/226347?s=40&v=4" width="25vw" style="border-radius: 10px;"></img></span>
+          Date.js
+        </a>
+      </div>
+
+      <div class="col-auto">
         <a href="https://highlightjs.org/">
-          <span><img src="./data/images/highlightjs.png" width="70vw" style="border-radius: 10px;"></img></span>
+          <span><img src="./data/images/highlightjs.png" width="25vw" style="border-radius: 10px;"></img></span>
           Highlight.js
         </a>
       </div>
 
       <div class="col-auto">
         <a href="https://leafletjs.com/">
-          <span><img src="./data/images/leaflet-3.jfif" width="70vw" style="border-radius: 10px;"></img></span>
+          <span><img src="./data/images/leaflet-3.jfif" width="25vw" style="border-radius: 10px;"></img></span>
           Leaflet
         </a>
       </div>
 
       <div class="col-auto">
         <a href="https://github.com/leaflet-extras/leaflet-providers">
-          <span><img src="./data/images/leaflet-3.jfif" width="70vw" style="border-radius: 10px;"></img></span>
+          <span><img src="./data/images/leaflet-3.jfif" width="25vw" style="border-radius: 10px;"></img></span>
           Leaflet providers
         </a>
       </div>
 
       <div class="col-auto">
         <a href="https://jquery.com/">
-          <span><img src="./data/images/jquery.png" width="80vw"></img></span>
+          <span><img src="./data/images/jquery.png" width="25vw"></img></span>
           JQuery
         </a>
       </div>
+
+      <div class="col-auto">
+        <a href="https://developer.github.com/">
+          <span style="color: white;"><i class="fab fa-github fa-lg"></i></span>
+          Github API
+        </a>
+      </div>
+
     </div>
-  </div>>
+  </div>
 
 
 
@@ -230,11 +261,11 @@
             <div class="flex-hz-slider">
               <div class="d-flex justify-content-start align-items-center" id="modal_image_slider"></div>
             </div>
+            <div id="modal_github_releases"></div>
+            <div id="modal_github_commits"></div>
           </div>
           <div class="col-auto col-lg-4">
-            <div class="d-flex justify-content-between">
-            </div>
-
+            <div class="d-flex justify-content-between"></div>
             <div id="modal_project_desc" v-html="compiledMarkdown"></div>
           </div>
         </div>
@@ -249,29 +280,20 @@
 
   <div id="project_text_only_modal" class="project-modal">
     <div class="container-fluid p-3">
-  
+
       <div class="d-flex justify-content-end">
         <button type="button" class="btn btn-danger" onclick="close_modal_by_id('project_text_only_modal')">Close</button>
       </div>
-      
+
       <div class="row">
         <div class="col-auto col-lg-1"></div>
-        <div class="col-auto col-lg-9" id="text_only_modal_project_desc"></div>
+        <div class="col-auto col-lg-9" id="modal_project_desc"></div>
         <div class="col-auto col-lg-1"></div>
       </div>
+      <div id="modal_github_commits"></div>
+      <div id="modal_github_releases"></div>
     </div>
   </div>
-
-
-  <!-- <footer> -->
-    <!-- TODO credits + nav links -->
-    <!-- https://github.com/twbs/bootstrap -->
-    <!-- https://github.com/markedjs/marked -->
-    <!-- https://highlightjs.org/ -->
-    <!-- https://leafletjs.com/ -->
-    <!-- https://github.com/leaflet-extras/leaflet-providers -->
-    <!-- https://jquery.com/ -->
-  <!-- </footer> -->
 
 </body>
 

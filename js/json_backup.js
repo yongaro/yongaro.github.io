@@ -9,13 +9,15 @@ const static_project_json_string = '{\
       "content" :[\
         {"type" : "Image", "file" : "cc1.png"}, {"type" : "Image", "file" : "cc2.png"}, {"type" : "Image", "file" : "ms.png"}, {"type" : "Image", "file" : "melynx.png"},\
         {"type" : "Image", "file" : "mush.png"}, {"type" : "Image", "file" : "clank.png"}, {"type" : "Image", "file" : "seg.png"}, {"type" : "Image", "file" : "seg2.png"}\
-      ]\
+      ],\
+      "github" : ""\
     },\
     {\
       "content" :[\
         {"type" : "Image", "file" : "bor5.jpg"}, {"type" : "Image", "file" : "bor3.jpg"}, {"type" : "Image", "file" : "bor2.jpg"},\
         {"type" : "Image", "file" : "bor1.jpg"}, {"type" : "Image", "file" : "gun.png"}, {"type" : "Image", "file" : "gun2.png"}\
-      ]\
+      ],\
+      "github" : "yongaro/Borderlands"\
     },\
     {\
       "content" :[\
@@ -32,45 +34,53 @@ const static_project_json_string = '{\
         {"type" : "Video", "file" : "https://www.youtube.com/embed/mfCSBa590Y8"},\
         {"type" : "Video", "file" : "https://www.youtube.com/embed/PNaVGXo9br0"},\
         {"type" : "Video", "file" : "https://www.youtube.com/embed/T8UhiA6y7J8"}\
-      ]\
+      ],\
+      "github" : ""\
     },\
     {\
       "content" :[\
         {"type" : "Image", "file" : "e3.png"}, {"type" : "Image", "file" : "e1.png"}, {"type" : "Image", "file" : "e2.png"}, {"type" : "Image", "file" : "m.jpg"},\
         {"type" : "Image", "file" : "b1.jpg"}, {"type" : "Image", "file" : "b2.jpg"}, {"type" : "Image", "file" : "s2_surf.jpg"}, {"type" : "Image", "file" : "s1_vol.png"},\
         {"type" : "Image", "file" : "recalage1.jpg"}, {"type" : "Image", "file" : "recalage4.jpg"}\
-      ]\
+      ],\
+      "github" : ""\
     },\
     {\
-      "content" : []\
+      "content" : [],\
+      "github" : "yongaro/lua_bender"\
     },\
     {\
       "content" :[\
         {"type" : "Image", "file" : "m6.png"}, {"type" : "Image", "file" : "m3.png"}, {"type" : "Image", "file" : "julia.png"}, {"type" : "Image", "file" : "budha.jpg"},\
         {"type" : "Image", "file" : "m2.png"}, {"type" : "Image", "file" : "m5.png"}, {"type" : "Image", "file" : "m4.png"}, {"type" : "Image", "file" : "m1.png"}\
-      ]\
+      ],\
+      "github" : ""\
     },\
     {\
       "content" :[\
         {"type" : "Image", "file" : "pokemon.gif"}, {"type" : "Image", "file" : "pok2.jpg"}, {"type" : "Image", "file" : "pok3.jpg"},\
         {"type" : "Image", "file" : "pok4.jpg"}, {"type" : "Image", "file" : "pok5.png"}, {"type" : "Image", "file" : "pok6.jpg"}\
-      ]\
+      ],\
+      "github" : "yongaro/Pokemon"\
     },\
     {\
       "content" :[\
         {"type" : "Image", "file" : "serious_farm.jpg"}, {"type" : "Image", "file" : "spring.png"}, {"type" : "Image", "file" : "automn.png"}, {"type" : "Image", "file" : "winter.png"}\
-      ]\
+      ],\
+      "github" : "yongaro/SeriousFarm"\
     },\
     {\
       "content" :[\
         {"type" : "Image", "file" : "VoxEngine-deferred.jpg"}, {"type" : "Image", "file" : "VoxEngine-forward.jpg"}, {"type" : "Image", "file" : "VoxEngine-snow.jpg"},\
         {"type" : "Image", "file" : "VoxEngine-sea.jpg"}, {"type" : "Image", "file" : "VoxEngine-lights.jpg"}\
-      ]\
+      ],\
+      "github" : "yongaro/VoxEngine"\
     },\
     {\
       "content" :[\
         {"type" : "Image", "file" : "vk4.jpg"}, {"type" : "Image", "file" : "vk1.jpg"}, {"type" : "Image", "file" : "vk2.jpg"}, {"type" : "Image", "file" : "vk3.jpg"}\
-      ]\
+      ],\
+      "github" : ""\
     }\
   ]\
 }';

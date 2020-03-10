@@ -68,87 +68,117 @@ var current_language = Languages.En;
 var current_project = -1;
 var project_list = [];
 
-async function delayed_project_description(project_id, project_desc){
-  project_desc.innerHTML = "<div class=\"loader\"></div><div style=\"text-align:center;\"><strong>Loading the project description.</strong></div>";
+
+function get_html_error_card(header_desc, body_desc){
+  return "<div class=\"card\" style=\"background-color: #0006; margin: 2%;\"><div class=\"card-header\" style=\"background-color: #B22;\"><strong>"
+  + header_desc
+  + "</strong></div><div class=\"card-body theme-content\">"
+  + body_desc
+  + "</div></div>";
+}
+
+async function delayed_project_description(project_id, project_desc, retry_count){
+  project_desc.innerHTML = "<div class=\"loading-dots\" style=\"text-align:center;\"><strong>Loading the project description</strong></div>";
 
   if(current_project == project_id){
-    if(project_list[project_id].m_description[current_language].m_text.length == 0){
-      console.log("used timeout");
-      setTimeout(function(){delayed_project_description(project_id, project_desc);}, 500);
+    var project_text = project_list[project_id].m_description[current_language].m_text;
+    // Retry another time after a delay.
+    if( project_text == null && retry_count > 0 ){
+      setTimeout(function(){delayed_project_description(project_id, project_desc, retry_count - 1);}, 1000);
     }
-    else{
+    // Whenever all we estimate it won't be loaded at all, display an error message.
+    if( project_text == null && retry_count <= 0 ){
+      project_desc.innerHTML = get_html_error_card("It seems this project description could not be loaded.", "You can check the browser console for more information and reload the page to try again.");
+    }
+    if( project_text != null && project_text.length > 0 ){
       project_desc.innerHTML = marked(project_list[project_id].m_description[current_language].m_text);
+
+      // Use highlight js to properly handle the potential code sections syntax highlighting.
+      project_desc.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+      });
     }
   }
 }
 
 
-// This function use
-function configure_project_modal(project_id){
-  var project = project_list[project_id];
-  var project_has_images = project.m_content.length > 0;
-  var modal_github_commits = null;
-  var modal_github_releases = null;
-  const project_modal_id = project_has_images ? "project_modal" : "project_text_only_modal";
-  var modal_root = document.getElementById(project_modal_id);
 
-  open_modal_element(modal_root);
+async function configure_project_modal(project_id){
+  // This functions requires for
+  if(project_list.length != ProjectId.Count){
+    setTimeout(function(){configure_project_modal(project_id);}, 100);
+  }
+  else{
+    var project = project_list[project_id];
+    var project_has_images = project.m_content.length > 0;
+    var modal_github_commits = null;
+    var modal_github_releases = null;
 
-  if( current_project != project_id || project.m_description[current_language].m_text.length == 0){
-    current_project = project_id;
+    const project_modal_id = project_has_images ? "project_modal" : "project_text_only_modal";
+    var modal_root = document.getElementById(project_modal_id);
+    open_modal_element(modal_root);
 
-    // Clean the github commit display if necessary
-    modal_github_commits = modal_root.querySelector("#modal_github_commits");
-    modal_github_releases = modal_root.querySelector("#modal_github_releases");
-    modal_github_commits.innerHTML = "";
-    modal_github_releases.innerHTML = "";
+    if( current_project != project_id || project.m_description[current_language].m_text == null ){
+      current_project = project_id;
 
-    // If there images are available, clean and prepare the image viewer.
-    if( project_has_images ){
-      // Configure the image viewer to the first image of the collection.
-      configure_project_modal_current_content(modal_root, project.m_content[0]);
+      // Clean the github commit display if necessary
+      modal_github_commits = modal_root.querySelector("#modal_github_commits");
+      modal_github_releases = modal_root.querySelector("#modal_github_releases");
+      modal_github_commits.innerHTML = "";
+      modal_github_releases.innerHTML = "";
 
-      // Clear and configure the image slider
-      configure_project_modal_image_slider(project_modal_id, modal_root, project_id);
-    }
+      // If there images are available, clean and prepare the image viewer.
+      if( project_has_images ){
+        // Configure the image viewer to the first image of the collection.
+        configure_project_modal_current_content(modal_root, project.m_content[0]);
 
-    // Compile the project markdown description and give the html code to the description element.
-    var project_desc = modal_root.querySelector("#modal_project_desc");
-    if( project.m_description[current_language].m_text.length == 0 ){
-      delayed_project_description(project_id, project_desc);
-      // project_desc.innerHTML = "It seems the description of this project is not yet loaded, please close this panel and wait a bit before opening it again.<br />Thanks !";
-    }
-    else{
-      project_desc.innerHTML = marked(project.m_description[current_language].m_text);
-    }
+        // Clear and configure the image slider
+        configure_project_modal_image_slider(project_modal_id, modal_root, project_id);
+      }
 
-    // Use highlight js to properly handle the potential code sections syntax highlighting.
-    project_desc.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightBlock(block);
-    });
+      // Compile the project markdown description and give the html code to the description element.
+      var project_desc = modal_root.querySelector("#modal_project_desc");
+      if( project.m_description[current_language].m_text == null ){
+        delayed_project_description(project_id, project_desc, 10);
+      }
+      else{
+        project_desc.innerHTML = marked(project.m_description[current_language].m_text);
 
-    // If a repository was specified, load some github informations.
-    if(project.m_github_infos.m_repo.length > 0){
-      modal_github_commits.innerHTML += "<div class=\"loader\"></div>";
-      modal_github_commits.innerHTML += "<div style=\"text-align:center;\"><strong>Fetching repository informations from the github API.</strong></div>";
+        // Use highlight js to properly handle the potential code sections syntax highlighting.
+        project_desc.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+      }
 
-      // Load the commit history if available and display it.
-      if( project.m_github_infos.m_commits.length == 0){
-        GitCommit.request_github_repo_commits(project.m_github_infos.m_repo, project, function(){
+      // If a repository was specified, load some github informations.
+      if(project.m_github_infos.m_repo.length > 0){
+        modal_github_commits.innerHTML += "<div class=\"loading-dots\" style=\"text-align:center;\"><strong>Fetching repository informations from the github API</strong></div>";
+
+        // Load the commit history if available and display it.
+        if( project.m_github_infos.m_commits.length == 0){
+          project.m_github_infos.m_commits = await GitCommit.request_github_repo_commits(project.m_github_infos.m_repo);
+
+          if( project.m_github_infos.m_commits.length == 0 ){
+            modal_github_commits.innerHTML = get_html_error_card("The github API could not be used to recover this project's commits and current release.", "More information should be available in the browser's console. <br /> You can just wait a bit and reopen this modal again.");
+          }
+          else{
+            build_commit_display(project.m_github_infos.m_commits, modal_github_commits, CommitDisplayMode.CommitHistory, modal_max_commit_displayed);
+          }
+        }
+        else{
           build_commit_display(project.m_github_infos.m_commits, modal_github_commits, CommitDisplayMode.CommitHistory, modal_max_commit_displayed);
-        });
-      }
-      else{
-        build_commit_display(project.m_github_infos.m_commits, modal_github_commits, CommitDisplayMode.CommitHistory, modal_max_commit_displayed);
-      }
+        }
 
-      // load informations on the available releases.
-      if( project.m_github_infos.m_releases.length == 0 ){
-        GitRelease.request_github_repo_releases(project.m_github_infos.m_repo, project.m_github_infos.m_releases, function(){
-          build_github_release_display(project.m_github_infos.m_releases, modal_github_releases, 1);
-        });
-      }
-      else{
+
+        // load informations on the available releases.
+        if( project.m_github_infos.m_releases.length == 0 ){
+          // modal_github_releases.inner
+          project.m_github_infos.m_releases = await GitRelease.request_github_repo_releases(project.m_github_infos.m_repo);
+
+          if( project.m_github_infos.m_releases.length != 0 ){
+            build_github_release_display(project.m_github_infos.m_releases, modal_github_releases, 1);
+          }
+        }
         build_github_release_display(project.m_github_infos.m_releases, modal_github_releases, 1);
       }
     }
@@ -165,7 +195,6 @@ function configure_project_modal_current_content(modal_root, content){
   }
 
   // Depending on the type either insert an img tag or a frame
-  // var content = project.m_content[content_id];
   var location_is_url = is_url(content.m_location);
   var content_element;
 
@@ -208,7 +237,6 @@ function configure_project_modal_current_content(modal_root, content){
 
 function slider_element_onclick(modal_id, project_id, content_id){
   var project = project_list[project_id];
-  // var modal_root = document.getElementById(modal_id);
   var content = project.m_content[content_id];
   configure_project_modal_current_content(modal_id, content);
 }
@@ -216,7 +244,6 @@ function slider_element_onclick(modal_id, project_id, content_id){
 
 function configure_project_modal_image_slider(project_modal_id, modal_root, project_id){
   var project = project_list[project_id];
-  // var modal_current_content = modal_root.querySelector("#modal_current_content");
 
   // Clear and configure the image slider
   var modal_image_slider = modal_root.querySelector("#modal_image_slider");
@@ -276,7 +303,7 @@ function load_projects_from_json(string_data){
     var temp_project = new Project();
     // Load descriptions to the current project.
     for(var itd = 0; itd < Languages.Count; ++itd){
-      temp_project.m_description.push(new Description(""));
+      temp_project.m_description.push(new Description(null));
     }
 
     // Load content to the current project.
@@ -298,7 +325,7 @@ async function request_project_description(url, project_description){
 }
 
 
-function load_projects_descriptions(){
+async function load_projects_descriptions(){
   for(var pid = 0; pid < ProjectId.Count; ++pid){
     for(var l = 0; l < Languages.Count; ++l){
       if( l == Languages.Fr ){ continue; } // Skip french until some language switch is implemented.
@@ -309,14 +336,38 @@ function load_projects_descriptions(){
 }
 
 
-async function ajax_request(url, method, dataType){
+async function timeout(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
+
+async function raw_ajax_request(url, method, data_type){
   return $.ajax({
     url: url,
-    dataType: dataType,
+    dataType: data_type,
     method: method,
-    async: true,
-    error: function(jqXHR, textStatus, errorThrown){ console.log(errorThrown); }
+    async: true
   });
+}
+
+
+async function ajax_request(url, method, data_type, max_retry_count, retry_delay){
+  var request_result = null;
+  var retry_limit = max_retry_count || 3;
+  var delay = retry_delay || 1000;
+
+  while( !request_result && retry_limit > 0 ){
+    try{ request_result = await raw_ajax_request(url, method, data_type); }
+    catch(exception){
+      if( request_result == null && retry_limit == 0 ){
+        console.log(exception);
+        return null;
+      }
+      else{
+        retry_limit--;
+        await timeout(delay);
+      }
+    }
+  }
+
+  return request_result;
 }
 
 
@@ -404,6 +455,7 @@ function build_github_release_display(releases, display_element, release_count){
 
     new_html += releases[0].m_markdown_body;
     new_html += "<br>";
+    new_html += "<div style=\"width=100%; border-bottom: 1px solid #888; margin-bottom: 1%;\"></div>";
 
     for(var i = 0; i < releases[0].m_assets.length; ++i){
       new_html += "<a href=\"" + releases[0].m_assets[i].m_download_url + "\">" + releases[0].m_assets[i].m_name + "</a> <strong>" + get_byte_string_size(releases[0].m_assets[i].m_size) + "</strong><br>";
@@ -417,12 +469,45 @@ function build_github_release_display(releases, display_element, release_count){
 }
 
 
+async function fetch_push_events_commits(){
+  var status_text = [];
+  var github_activity_div = document.getElementById(github_activity_table_id);
+  var progress_text_elt = github_activity_div.children[1].children[0];
+  var update_status_display = function(){
+    var temp_inner_html = "";
+    for(var i = 0; i < status_text.length; ++i){
+      temp_inner_html += status_text[i];
+    }
+    progress_text_elt.innerHTML = temp_inner_html;
+  }
+
+  status_text.push("Requesting the push events from the github API. <br />");
+  update_status_display();
+  var commits = await GitCommit.request_push_events_commits(my_github_user_name);
+  if( commits.length == 0 ){
+    github_activity_div.innerHTML = get_html_error_card("It seems the recent events could not be received from the github API.", "Please wait a bit and reload this page. <br /> More information should be available in the console.");
+    return null;
+  }
+  status_text.push("");
+  for(var i = 0; i < commits.length; ++i){
+    status_text[status_text.length-1] = "Fetching additionnal commit information " + (i+1) + "/" + commits.length + "<br />";
+    update_status_display();
+    await GitCommit.request_github_commit_additional_infos(commits[i]);
+  }
+
+  status_text.push("Building the display. <br />");
+  update_status_display();
+
+  build_commit_display(commits, github_activity_div, CommitDisplayMode.PushEvent, max_commit_displayed);
+}
+
+
 function load_projects() {
   load_projects_from_json(static_project_json_string);
   load_projects_descriptions();
 
-  var github_activity_div = document.getElementById(github_activity_table_id);
-  GitCommit.fetch_push_events_commits("yongaro", github_activity_div.children[1].children[0], build_commit_display, github_activity_div, CommitDisplayMode.PushEvent, max_commit_displayed);
+
+  fetch_push_events_commits();
 
   // Setup the location map
   // 43.468771, 3.184393 || 43.631, 3.90876 || zoom 14 // dunno
@@ -445,19 +530,22 @@ function load_projects() {
 function open_modal_element(modal_element) {
   modal_element.style.display = "block";
   $('body').css({ 'overflow': 'hidden' });
-  $(document).bind('scroll',function () { window.scrollTo(0,0); });
+  window.scrollTo(0, 0);
+  modal_element.tabIndex = -1;
+  modal_element.focus();
 
-  // Also bind a closing function to the escape key.
   document.onkeydown = function(e){
-    if(e.which == 27){
+    switch(e.which){
+      // Bind a closing function on the escape key.
+      case 27:
       close_modal_element(modal_element);
+      break;
     }
   };
 }
 
 function close_modal_element(modal_element) {
   modal_element.style.display = "none";
-  $(document).unbind('scroll');
   document.getElementsByTagName("body")[0].style.overflow = "visible";
   document.onkeydown = null;
 }
@@ -465,7 +553,6 @@ function close_modal_element(modal_element) {
 
 function close_modal_by_id(modal_id) {
   document.getElementById(modal_id).style.display = "none";
-  $(document).unbind('scroll');
   document.getElementsByTagName("body")[0].style.overflow = "visible";
   document.onkeydown = null;
 }

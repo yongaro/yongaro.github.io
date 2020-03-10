@@ -50,6 +50,25 @@
   transform:translate(-50%,-50%);
   color:#fff;
 }
+
+
+.overlay-loader{
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  opacity: 1;
+  background-color: #2228;
+}
+
+.overlay-loader .loading-dots{
+  position: absolute;
+  top:75%;
+  left:50%;
+  transform:translate(-50%,-75%);
+  color: #fff;
+}
 /* ************************************************************* */
 
 
@@ -180,6 +199,8 @@
 
 .git-card-body{
   background-color: #212121;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 @media (min-width: 1400px){

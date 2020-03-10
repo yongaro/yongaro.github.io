@@ -1,4 +1,4 @@
-# **Imagerie 3D**
+# **3D Image processing**
 
 You can see here a demonstration of several 3D images processing algorithms implemented in C++
 

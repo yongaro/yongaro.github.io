@@ -26,103 +26,78 @@ class GitCommit{
     this.m_repo_name   = "";
   }
 
-  static async request_github_commit(commit){
+  static async request_github_commit_additional_infos(commit){
     var data = await ajax_request(github_commit_url(commit.m_repo_name, commit.m_sha), "GET", "json");
-    commit.m_sha           = data.sha;
-    commit.m_html_url      = data.html_url;
-    commit.m_date          = Date.parse(data.commit.author.date);
-    commit.m_author.m_name = data.commit.author.name;
+    if( data != null ){
+      commit.m_sha           = data.sha;
+      commit.m_html_url      = data.html_url;
+      commit.m_date          = Date.parse(data.commit.author.date);
+      commit.m_author.m_name = data.commit.author.name;
 
-    // Those author informations are not always filled by the github api and must be filtered.
-    if(data.author != null){
-      commit.m_author.m_id    = data.author.id;
-      commit.m_author.m_login = data.author.login;
-    }
-    else if(data.commiter != null){
-      commit.m_author.m_id    = data.commiter.id;
-      commit.m_author.m_login = data.commiter.login;
+      // Those author informations are not always filled by the github api and must be filtered.
+      if(data.author != null){
+        commit.m_author.m_id    = data.author.id;
+        commit.m_author.m_login = data.author.login;
+      }
+      else if(data.commiter != null){
+        commit.m_author.m_id    = data.commiter.id;
+        commit.m_author.m_login = data.commiter.login;
+      }
     }
   }
 
-  static async request_push_events_commits(commits, user_name){
+  static async request_push_events_commits(user_name){
     var data = await ajax_request(github_user_events_url(user_name), "GET", "json");
-    for(var i = 0; i < data.length; ++i){
-      if( data[i].type == "PushEvent" ){
-        for(var j = 0; j < data[i].payload.commits.length; ++j){
-          if( data[i].payload.commits[j].message.length > 50 ){
-            var commit_ref = new GitCommit();
-            commit_ref.m_sha         = data[i].payload.commits[j].sha;
-            commit_ref.m_repo_name   = data[i].repo.name;
-            commit_ref.m_description = data[i].payload.commits[j].message.match(/[^\r\n]+/g);
-            commits.push(commit_ref);
+    var commits = [];
+    if( data != null ){
+      for(var i = 0; i < data.length; ++i){
+        if( data[i].type == "PushEvent" ){
+          for(var j = 0; j < data[i].payload.commits.length; ++j){
+            if( data[i].payload.commits[j].message.length > 50 ){
+              var commit_ref = new GitCommit();
+              commit_ref.m_sha         = data[i].payload.commits[j].sha;
+              commit_ref.m_repo_name   = data[i].repo.name;
+              commit_ref.m_description = data[i].payload.commits[j].message.match(/[^\r\n]+/g);
+              commits.push(commit_ref);
+            }
           }
         }
       }
     }
+
+    return commits;
   }
 
-  static async fetch_push_events_commits(user_name, progress_text_elt, on_success_func, ...args){
-    var commits = [];
-    var status_text = [];
-    var update_status_display = function(){
-      var temp_inner_html = "";
-      for(var i = 0; i < status_text.length; ++i){
-        temp_inner_html += status_text[i];
-      }
-      progress_text_elt.innerHTML = temp_inner_html;
-    }
-
-    status_text.push("Requesting the push events from the github API. <br />");
-    update_status_display();
-    await GitCommit.request_push_events_commits(commits, user_name);
-
-    status_text.push("");
-    for(var i = 0; i < commits.length; ++i){
-      status_text[status_text.length-1] = "Fetching additionnal commit information " + (i+1) + "/" + commits.length + "<br />";
-      update_status_display();
-      await GitCommit.request_github_commit(commits[i]);
-    }
-
-    status_text.push("Building the display. <br />");
-    update_status_display();
-    // progress_text_elt.innerText = "Building the display";
-
-    if( on_success_func && typeof(on_success_func) == "function"){
-      on_success_func(commits, ...args);
-    }
-  }
-
-
-  static async request_github_repo_commits(user_and_repo_name, project, on_success_func, ...args){
+  static async request_github_repo_commits(user_and_repo_name){
     var data = await ajax_request(github_user_repo_all_commits_list_url(user_and_repo_name), "GET", "json");
-    var commits = project.m_github_infos.m_commits;
-    for(var i = 0; i < data.length; ++i){
-      var commit = new GitCommit();
-      commit.m_sha           = data[i].sha;
-      commit.m_html_url      = data[i].html_url;
-      commit.m_date          = Date.parse(data[i].commit.author.date);
-      commit.m_author.m_name = data[i].commit.author.name;
-      commit.m_description   = data[i].commit.message.match(/[^\r\n]+/g);
-      commit.m_repo_name     = user_and_repo_name;
+    var commits = [];
+    if( data != null ){
+      for(var i = 0; i < data.length; ++i){
+        var commit = new GitCommit();
+        commit.m_sha           = data[i].sha;
+        commit.m_html_url      = data[i].html_url;
+        commit.m_date          = Date.parse(data[i].commit.author.date);
+        commit.m_author.m_name = data[i].commit.author.name;
+        commit.m_description   = data[i].commit.message.match(/[^\r\n]+/g);
+        commit.m_repo_name     = user_and_repo_name;
 
-      // Those author informations are not always filled by the github api and must be filtered.
-      if(data[i].author != null){
-        commit.m_author.m_id    = data[i].author.id;
-        commit.m_author.m_login = data[i].author.login;
-      }
-      else if(data[i].commiter != null){
-        commit.m_author.m_id    = data[i].commiter.id;
-        commit.m_author.m_login = data[i].commiter.login;
+        // Those author informations are not always filled by the github api and must be filtered.
+        if(data[i].author != null){
+          commit.m_author.m_id    = data[i].author.id;
+          commit.m_author.m_login = data[i].author.login;
+        }
+        else if(data[i].commiter != null){
+          commit.m_author.m_id    = data[i].commiter.id;
+          commit.m_author.m_login = data[i].commiter.login;
+        }
+
+        commits.push(commit);
       }
 
-      project.m_github_infos.m_commits.push(commit);
+      commits.sort(GitCommit.compare_desc);
     }
 
-    project.m_github_infos.m_commits.sort(GitCommit.compare_desc);
-
-    if( on_success_func && typeof(on_success_func) == "function"){
-      on_success_func(commits, ...args);
-    }
+    return commits;
   }
 
 
@@ -147,41 +122,40 @@ class GitRelease{
     this.m_assets        = [];
   }
 
-  static async request_github_repo_releases(user_and_repo_name, releases, on_success_func, ...args){
+  static async request_github_repo_releases(user_and_repo_name, releases, on_error_func, on_success_func, ...args){
     var data = await ajax_request(github_user_repo_release_list_url(user_and_repo_name), "GET", "json");
-    // var releases = project.m_github_infos.m_releases;
-    for(var i = 0; i < data.length; ++i){
-      var release = new GitRelease();
-      release.m_id = data[i].id;
-      release.m_name = data[i].name;
-      release.m_tag_name = data[i].tag_name;
-      release.m_markdown_body = marked(data[i].body);
-      release.m_html_url = data[i].html_url;
-      release.m_date = Date.parse(data[i].published_at);
+    var releases = [];
+    if( data != null ){
+      for(var i = 0; i < data.length; ++i){
+        var release = new GitRelease();
+        release.m_id = data[i].id;
+        release.m_name = data[i].name;
+        release.m_tag_name = data[i].tag_name;
+        release.m_markdown_body = marked(data[i].body);
+        release.m_html_url = data[i].html_url;
+        release.m_date = Date.parse(data[i].published_at);
 
-      if( data[i].author != null){
-        release.m_author = new GitAuthor();
-        release.m_author.m_id = data[i].author.id;
-        release.m_author.m_login = data[i].author.login;
-      }
+        if( data[i].author != null){
+          release.m_author = new GitAuthor();
+          release.m_author.m_id = data[i].author.id;
+          release.m_author.m_login = data[i].author.login;
+        }
 
-      for(var j = 0; j < data[i].assets.length; ++j){
-        var release_asset = new GitReleaseAsset();
-        release_asset.m_id = data[i].assets[j].id;
-        release_asset.m_name = data[i].assets[j].name;
-        release_asset.m_size = data[i].assets[j].size;
-        release_asset.m_download_url = data[i].assets[j].browser_download_url;
-        release.m_assets.push(release_asset);
+        for(var j = 0; j < data[i].assets.length; ++j){
+          var release_asset = new GitReleaseAsset();
+          release_asset.m_id = data[i].assets[j].id;
+          release_asset.m_name = data[i].assets[j].name;
+          release_asset.m_size = data[i].assets[j].size;
+          release_asset.m_download_url = data[i].assets[j].browser_download_url;
+          release.m_assets.push(release_asset);
+        }
+        releases.push(release);
       }
-      releases.push(release);
+      // releases.sort(GitRelease.compare_desc);
+      releases.sort(GitRelease.compare_desc);
     }
 
-    // project.m_github_infos.m_releases.sort(GitRelease.compare_desc);
-    releases.sort(GitRelease.compare_desc);
-
-    if( on_success_func && typeof(on_success_func) == "function"){
-      on_success_func(releases, ...args);
-    }
+    return releases;
   }
 
   static compare_asc(c1, c2){
@@ -213,3 +187,4 @@ function github_user_repo_branch_list_url(user_name, repo_name)                 
 function github_user_repo_branch_commits_list_url(user_name, repo_name, branch_name){ return github_api_url + "repos/" + user_name + "/" + repo_name + "/commits?sha=" + branch_name; }
 function github_user_repo_release_list_url(user_and_repo_name)                      { return github_api_url + "repos/" + user_and_repo_name + "/releases";                            }
 function github_user_repo_release_url(user_and_repo_name, id)                       { return github_api_url + "repos/" + user_and_repo_name + "/releases/" + id;                      }
+function github_rate_limit()                                                        { return github_api_url + "rate_limit";                                                           }

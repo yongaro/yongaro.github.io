@@ -1,5 +1,5 @@
-var ContentType = {Image: 0, Video: 1};
-var Languages = {En: 0, Fr: 1, Count: 2};
+const ContentType = {Image: 0, Video: 1};
+const Languages = {En: 0, Fr: 1, Count: 2};
 
 class Description{
   constructor(text){
@@ -67,6 +67,21 @@ var modal_max_commit_displayed     = 2;
 var current_language = Languages.En;
 var current_project = -1;
 var project_list = [];
+var additional_github_repos = [];
+
+
+window.gc_params = {
+  graphcomment_id: 'yongaro-portfolio',
+  // if your website has a fixed header, indicate it's height in pixels
+  fixed_header_height: 0,
+};
+
+/* - - - DON'T EDIT BELOW THIS LINE - - - */
+(function() {
+  var gc = document.createElement('script'); gc.type = 'text/javascript'; gc.async = true;
+  gc.src = 'https://graphcomment.com/js/integration.js?' + Math.round(Math.random() * 1e8);
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(gc);
+})();
 
 
 function get_html_error_card(header_desc, body_desc){
@@ -155,8 +170,8 @@ async function configure_project_modal(project_id){
         modal_github_commits.innerHTML += "<div class=\"loading-dots\" style=\"text-align:center;\"><strong>Fetching repository informations from the github API</strong></div>";
 
         // Load the commit history if available and display it.
-        if( project.m_github_infos.m_commits.length == 0){
-          project.m_github_infos.m_commits = await GitCommit.request_github_repo_commits(project.m_github_infos.m_repo);
+        if( project.m_github_infos.m_commits.length == 0 ){
+          await project.m_github_infos.request_commits();
 
           if( project.m_github_infos.m_commits.length == 0 ){
             modal_github_commits.innerHTML = get_html_error_card("The github API could not be used to recover this project's commits and current release.", "More information should be available in the browser's console. <br /> You can just wait a bit and reopen this modal again.");
@@ -172,8 +187,7 @@ async function configure_project_modal(project_id){
 
         // load informations on the available releases.
         if( project.m_github_infos.m_releases.length == 0 ){
-          // modal_github_releases.inner
-          project.m_github_infos.m_releases = await GitRelease.request_github_repo_releases(project.m_github_infos.m_repo);
+          await project.m_github_infos.request_releases();
 
           if( project.m_github_infos.m_releases.length != 0 ){
             build_github_release_display(project.m_github_infos.m_releases, modal_github_releases, 1);
@@ -319,6 +333,16 @@ function load_projects_from_json(string_data){
   }
 }
 
+function parse_additional_github_repo(string_data){
+  var data = JSON.parse(string_data);
+
+  for(var i = 0; i < data.projects.length; ++i){
+    var github_infos = new GithubInfos();
+    github_infos.m_repo = data.projects[i].repo;
+    additional_github_repos.push(github_infos);
+  }
+}
+
 
 async function request_project_description(url, project_description){
   project_description.m_text = await ajax_request(url, "GET", "text");
@@ -385,7 +409,11 @@ async function build_commit_display(commits, display_element, display_mode, comm
   }
 
 
-  for(var i = 0; i < count; ++i){
+  var i = 0;
+  var displayed_commit_count = 0;
+  // for(var i = 0; i < count; ++i){
+  while( displayed_commit_count < count ){
+    if( display_mode == CommitDisplayMode.PushEvent && commits[i].m_description.length <= 1 ){ ++i; continue; }
     var commit_card_head_id = "commit_card_head_" + i;
     var commit_card_collapse_id = "commit_card_collapse_" + i;
     var repo_url = "https://github.com/" + commits[i].m_repo_name;
@@ -419,6 +447,8 @@ async function build_commit_display(commits, display_element, display_mode, comm
     new_html +=      "</div>";
     new_html +=    "</div>";
     new_html +=  "</div>";
+    ++i;
+    ++displayed_commit_count;
   }
 
   display_element.innerHTML = new_html;
@@ -468,7 +498,7 @@ function build_github_release_display(releases, display_element, release_count){
   }
 }
 
-
+/* Soon to be obsolete method to extract the mosts recents commits from the githup API events.*/
 async function fetch_push_events_commits(){
   var status_text = [];
   var github_activity_div = document.getElementById(github_activity_table_id);
@@ -502,17 +532,83 @@ async function fetch_push_events_commits(){
 }
 
 
+// This function will load every project commit list plus the ones given in the additional repo json data.
+async function request_projects_commits(){
+  // Then parse one
+  for(var i = 0; i < project_list.length; ++i){
+    project_list[i].m_github_infos.request_commits();
+  }
+
+  for(var i = 0; i < additional_github_repos.length; ++i){
+    additional_github_repos[i].request_commits();
+  }
+}
+
+async function build_recent_commits_list(){
+  // First count the number of repos and the count the finished loading requests.
+  var total_repo_count = additional_github_repos.length;
+  var loaded_repo_count = 0;
+
+  for(var i = 0; i < project_list.length; ++i){
+    if( project_list[i].m_github_infos.m_repo.length > 0 ){
+       ++total_repo_count;
+       if( project_list[i].m_github_infos.m_status & GithubLoadingStatus.CommitsLoaded ){ ++loaded_repo_count; }
+     }
+  }
+
+  for(var i = 0; i < additional_github_repos.length; ++i){
+    if( additional_github_repos[i].m_repo.length > 0 ){
+      if( additional_github_repos[i].m_status & GithubLoadingStatus.CommitsLoaded ){ ++loaded_repo_count; }
+    }
+  }
+
+  var github_activity_div = document.getElementById(github_activity_table_id);
+  var progress_text_elt = github_activity_div.children[0].children[0];
+  progress_text_elt.innerHTML = "Loading projects commit history " + ((loaded_repo_count / total_repo_count) * 100).toFixed(0) + "%";
+
+
+  if( loaded_repo_count != total_repo_count ){
+    setTimeout(build_recent_commits_list, 100);
+  }
+  else{
+    // Build a common commit list.
+    var commits = [];
+    for(var i = 0; i < project_list.length; ++i){
+      if( project_list[i].m_github_infos.m_repo.length > 0 ){
+        commits = commits.concat( project_list[i].m_github_infos.m_commits );
+      }
+    }
+
+    for(var i = 0; i < additional_github_repos.length; ++i){
+      if( additional_github_repos[i].m_repo.length > 0 ){
+        commits = commits.concat( additional_github_repos[i].m_commits );
+      }
+    }
+
+
+    // Sort it from newer to oldest.
+    commits.sort(GitCommit.compare_desc);
+
+    // Build the display.
+    build_commit_display(commits, github_activity_div, CommitDisplayMode.PushEvent, max_commit_displayed);
+  }
+}
+
+
 function load_projects() {
   load_projects_from_json(static_project_json_string);
+  parse_additional_github_repo(static_additional_github_projects);
+
+  request_projects_commits();
+  build_recent_commits_list();
+
+
   load_projects_descriptions();
-
-
-  fetch_push_events_commits();
 
   // Setup the location map
   // 43.468771, 3.184393 || 43.631, 3.90876 || zoom 14 // dunno
-  // 43.423233, 3.2201016 || zoom 12 St genies de fontedit
-  // 43.3397709, 3.214989 || Béziers
+  // 43.423233, 3.2201016 || zoom 12 StGe
+  // 43.3397709, 3.214989 || Bez
   var home_leaflet_map = L.map('home_map',{ center: [43.3823759, 3.202865], zoom: 5, scrollWheelZoom: false, dragging: false});
   var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,

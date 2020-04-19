@@ -1,10 +1,31 @@
+const GithubLoadingStatus = {New: 0, LoadingCommits: 2, CommitsLoaded: 4, LoadingReleases: 8, ReleasesLoaded: 16};
+
+
 
 class GithubInfos{
   constructor(){
     this.m_repo     = "";
     this.m_commits  = [];
     this.m_releases = [];
-    this.m_loaded   = false;
+    this.m_status   = GithubLoadingStatus.New;
+  }
+
+  async request_commits(){
+    if( this.m_repo.length > 0 && (~(this.m_status & GithubLoadingStatus.LoadingCommits) && ~(this.m_status & GithubLoadingStatus.CommitsLoaded)) ){
+      this.m_status = this.m_status | GithubLoadingStatus.LoadingCommits;
+      this.m_commits = await GitCommit.request_github_repo_commits(this.m_repo);
+      this.m_status = this.m_status & ~GithubLoadingStatus.LoadingCommits;
+      this.m_status = this.m_commits.length > 0 ? this.m_status | GithubLoadingStatus.CommitsLoaded : this.m_status;
+    }
+  }
+
+  async request_releases(){
+    if( this.m_repo.length > 0 && (~(this.m_status & GithubLoadingStatus.LoadingReleases) && ~(this.m_status & GithubLoadingStatus.ReleasesLoaded)) ){
+      this.m_status = this.m_status | GithubLoadingStatus.LoadingReleases;
+      this.m_releases = await GitRelease.request_github_repo_releases(this.m_repo);
+      this.m_status = this.m_status & ~GithubLoadingStatus.LoadingReleases;
+      this.m_status = this.m_commits.length > 0 ? this.m_status | GithubLoadingStatus.ReleasesLoaded : this.m_status;
+    }
   }
 }
 
@@ -122,7 +143,7 @@ class GitRelease{
     this.m_assets        = [];
   }
 
-  static async request_github_repo_releases(user_and_repo_name, releases, on_error_func, on_success_func, ...args){
+  static async request_github_repo_releases(user_and_repo_name){
     var data = await ajax_request(github_user_repo_release_list_url(user_and_repo_name), "GET", "json");
     var releases = [];
     if( data != null ){

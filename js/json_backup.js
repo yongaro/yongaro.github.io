@@ -84,3 +84,9 @@ const static_project_json_string = '{\
     }\
   ]\
 }';
+
+const static_additional_github_projects = '{\
+  "projects" : [\
+    {"repo" : "yongaro/yongaro.github.io"}\
+  ]\
+}';

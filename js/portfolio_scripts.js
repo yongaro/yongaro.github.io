@@ -69,19 +69,12 @@ var current_project = -1;
 var project_list = [];
 var additional_github_repos = [];
 
-
+// Graph comment basic init.
 window.gc_params = {
   graphcomment_id: 'yongaro-portfolio',
   // if your website has a fixed header, indicate it's height in pixels
   fixed_header_height: 0,
 };
-
-/* - - - DON'T EDIT BELOW THIS LINE - - - */
-(function() {
-  var gc = document.createElement('script'); gc.type = 'text/javascript'; gc.async = true;
-  gc.src = 'https://graphcomment.com/js/integration.js?' + Math.round(Math.random() * 1e8);
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(gc);
-})();
 
 
 function get_html_error_card(header_desc, body_desc){
@@ -119,7 +112,7 @@ async function delayed_project_description(project_id, project_desc, retry_count
 
 
 async function configure_project_modal(project_id){
-  // This functions requires for
+  // This functions requires the basic JSON data to be loaded.
   if(project_list.length != ProjectId.Count){
     setTimeout(function(){configure_project_modal(project_id);}, 100);
   }
@@ -599,11 +592,10 @@ function load_projects() {
   load_projects_from_json(static_project_json_string);
   parse_additional_github_repo(static_additional_github_projects);
 
+  load_projects_descriptions();
   request_projects_commits();
   build_recent_commits_list();
 
-
-  load_projects_descriptions();
 
   // Setup the location map
   // 43.468771, 3.184393 || 43.631, 3.90876 || zoom 14 // dunno
@@ -620,6 +612,13 @@ function load_projects() {
 
   OpenStreetMap_Mapnik.addTo(home_leaflet_map);
   home_marker.addTo(home_leaflet_map);
+
+  /* - - - GRAPHCOMMENT INIT -- DON'T EDIT THIS FUNCTION EVER ! - - - */
+  (function() {
+    var gc = document.createElement('script'); gc.type = 'text/javascript'; gc.async = true;
+    gc.src = 'https://graphcomment.com/js/integration.js?' + Math.round(Math.random() * 1e8);
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(gc);
+  })();
 }
 
 

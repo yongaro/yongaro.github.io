@@ -43,7 +43,7 @@
     "jasmine": "^3.3.1",
     "jasmine2-custom-message": "^0.9.3",
     "markdown": "0.x",
-    "markdown-it": "8.x",
+    "markdown-it": "12.x",
     "uglify-js": "^3.4.9"
   },
   "scripts": {
